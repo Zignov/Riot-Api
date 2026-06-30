@@ -1,4 +1,4 @@
-
+import json
 import requests
 from urllib.parse import quote
 from helperFunctions import *
@@ -55,7 +55,7 @@ def getMatchHistory(puuid, count = 20):
         
         
 #Function for getting data for a player in a given match for every minute (matchId, puuid -> frames(time, gold, level, pos))
-def playersTimeline(matchId, puuid):
+def playersGold(matchId, puuid):
     url = (
         f"https://{REGION}.api.riotgames.com"
         f"/lol/match/v5/matches/{matchId}/timeline"
@@ -163,11 +163,19 @@ if __name__ == "__main__":
     #Puuid = getPuuid("main", "talon")
     #Puuid = getPuuid("Ektrik", "bruh") 
     Puuid = getPuuid("LivelyHarsh", "3145")
+    match = getMatchHistory(Puuid, 1)[0]
+    
+    
+    print(match)
+    data = getTimeline(match)
+    
+    with open("example_timeline.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, indent = 4)
     
     #buildingPlayerBase(Puuid, 30)
     
-    connections = buildingPlayerBase(Puuid, 100, 2)
-    drawFriendsGraph(Puuid, connections)
+    #connections = buildingPlayerBase(Puuid, 100, 2)
+    #drawFriendsGraph(Puuid, connections)
     
 
 

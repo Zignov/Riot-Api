@@ -3,7 +3,7 @@ from config import *
 import time
 
 #Helper function for getting all player puuids from a given match (matchID -> list(puuids)) 
-def extractPlayers(matchId):
+def getPlayers(matchId):
     url = (
         f"https://{REGION}.api.riotgames.com"
         f"/lol/match/v5/matches/{matchId}"
@@ -14,7 +14,7 @@ def extractPlayers(matchId):
 
     if response.status_code == 429:
         time.sleep(61)
-        return extractPlayers(matchId)
+        return getPlayers(matchId)
     elif response.status_code == 200:
         data = response.json()
         participants = data["metadata"]["participants"]
@@ -42,4 +42,23 @@ def getAccount(puuid):
     else:
         print_api_error("getAccount", response)
         return None
-
+    
+    
+    
+    
+def getTimeline(matchId):
+    
+    url = (
+        f"https://{REGION}.api.riotgames.com"
+        f"/lol/match/v5/matches/{matchId}/timeline"
+    )
+    
+    response = requests.get(url, headers=HEADERS)
+    
+    if response.status_code == 200:
+        data = response.json()
+        return data
+    
+    else:
+        print_api_error("getTimeline", response)
+        return None
